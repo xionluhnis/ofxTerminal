@@ -27,7 +27,7 @@ public:
     int margin;
     float lineRatio;
 
-    ofxTerminal(const string &welcomeMessage = "ofxTerminal.") {
+    ofxTerminal(const string &welcomeMessage = "ofxTerminal.\n") {
         focus = nextFocus = true;
         //orientation = TopDown;
         bgColor = ofColor(0, 0, 0, 100);
@@ -163,6 +163,10 @@ public:
         return lines.back().output;
     }
     
+    void flush() {
+        lines.back().mergeOutput();
+    }
+    
     void setFocus(bool f, bool delayed = false) {
         if(delayed){
             nextFocus = f;
@@ -206,6 +210,8 @@ private:
         }
         
         void mergeOutput() {
+            if(output.empty())
+                return;
             vector<string> newLines = splitOutput();
             for(unsigned int i = 0; i < newLines.size(); ++i){
                 outputLines.push_back(newLines[i]);
